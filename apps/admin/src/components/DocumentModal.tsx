@@ -1,0 +1,194 @@
+import React, { useState } from 'react';
+import { SantriData, useSPMB, getStatusBerkasLabel } from '@spmb/shared';
+import { Modal, Button, Badge, Icon } from '@spmb/ui';
+
+interface DocumentModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  santri: SantriData;
+}
+
+export const DocumentModal: React.FC<DocumentModalProps> = ({ isOpen, onClose, santri }) => {
+  const { docRequirements, updateSantriStatus, verifySantriDoc } = useSPMB();
+  const [rejectNote, setRejectNote] = useState('');
+  const [activeDocKey, setActiveDocKey] = useState<string | null>(null);
+
+  const berkasStatus = getStatusBerkasLabel(santri.statusBerkas);
+
+  const handleApproveAll = () => {
+    // Mark all uploaded docs as valid
+    Object.keys(santri.documents).forEach((key) => {
+      verifySantriDoc(santri.id, key, 'VALID');
+    });
+    updateSantriStatus(santri.id, {
+      statusBerkas: 'TERVERIFIKASI',
+      catatanPanitia: 'Berkas lengkap dan telah diverifikasi sah oleh Panitia SPMB.'
+    });
+    onClose();
+  };
+
+  const handleRejectWithNote = (docKey: string) => {
+    if (!rejectNote.trim()) return;
+    verifySantriDoc(santri.id, docKey, 'REJECTED', rejectNote.trim());
+    updateSantriStatus(santri.id, {
+      statusBerkas: 'REVISI',
+      catatanPanitia: `Revisi berkas ${docKey}: ${rejectNote.trim()}`
+    });
+    setActiveDocKey(null);
+    setRejectNote('');
+  };
+
+  return (
+    <Modal isOpen={isOpen} onClose={onClose} maxWidth="3xl" title="Verifikasi & Pratinjau Berkas Calon Santri">
+      <div className="space-y-6">
+        {/* Santri Header in Modal */}
+        <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <img
+              src={santri.photoUrl}
+              alt={santri.fullName}
+              className="w-12 h-14 object-cover rounded-lg border border-slate-300"
+            />
+            <div>
+              <span className="font-mono text-xs font-bold text-emerald-800 block">
+                {santri.noReg} &bull; NISN: {santri.nisn}
+              </span>
+              <h4 className="font-serif font-bold text-base text-slate-900">{santri.fullName}</h4>
+              <p className="text-xs text-slate-500">
+                Jenjang: {santri.level} {santri.jurusan ? `(${santri.jurusan})` : ''} &bull; Asal: {santri.prevSchool}
+              </p>
+            </div>
+          </div>
+
+          <Badge variant={santri.statusBerkas === 'TERVERIFIKASI' ? 'emerald' : 'amber'}>
+            {berkasStatus.label}
+          </Badge>
+        </div>
+
+        {/* Document Checklist */}
+        <div className="space-y-3">
+          <h4 className="font-serif font-bold text-sm text-slate-800">
+            Daftar Berkas Persyaratan ({Object.keys(santri.documents).length} Diunggah):
+          </h4>
+
+          <div className="space-y-2.5 max-h-72 overflow-y-auto pr-1">
+            {docRequirements.map((doc) => {
+              const uploaded = santri.documents[doc.key];
+              const isUploaded = !!uploaded;
+              const isValid = uploaded?.status === 'VALID';
+              const isRejected = uploaded?.status === 'REJECTED';
+
+              return (
+                <div
+                  key={doc.id}
+                  className={`p-3 rounded-lg border flex flex-col justify-between gap-2 text-xs transition-all ${
+                    isValid
+                      ? 'bg-emerald-50/50 border-emerald-200'
+                      : isRejected
+                      ? 'bg-rose-50/50 border-rose-200'
+                      : 'bg-white border-slate-200'
+                  }`}
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <Icon
+                        name={isValid ? 'check_circle' : isRejected ? 'cancel' : 'description'}
+                        size={18}
+                        className={isValid ? 'text-emerald-700' : isRejected ? 'text-rose-600' : 'text-slate-400'}
+                      />
+                      <div>
+                        <span className="font-bold text-slate-800">{doc.name}</span>
+                        {uploaded && (
+                          <span className="text-slate-500 font-mono block text-[11px]">
+                            {uploaded.fileName} ({uploaded.fileSize})
+                          </span>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-1.5">
+                      {isUploaded ? (
+                        <>
+                          <button
+                            onClick={() => verifySantriDoc(santri.id, doc.key, 'VALID')}
+                            className={`px-2.5 py-1 rounded text-xs font-semibold ${
+                              isValid
+                                ? 'bg-emerald-700 text-white'
+                                : 'bg-emerald-100 text-emerald-800 hover:bg-emerald-200'
+                            }`}
+                          >
+                            Sah (Valid)
+                          </button>
+                          <button
+                            onClick={() => setActiveDocKey(doc.key)}
+                            className={`px-2.5 py-1 rounded text-xs font-semibold ${
+                              isRejected
+                                ? 'bg-rose-700 text-white'
+                                : 'bg-rose-100 text-rose-800 hover:bg-rose-200'
+                            }`}
+                          >
+                            Minta Revisi
+                          </button>
+                        </>
+                      ) : (
+                        <span className="text-slate-400 italic">Belum Diunggah</span>
+                      )}
+                    </div>
+                  </div>
+
+                  {activeDocKey === doc.key && (
+                    <div className="mt-2 p-2.5 bg-rose-50 border border-rose-200 rounded flex items-center gap-2">
+                      <input
+                        type="text"
+                        value={rejectNote}
+                        onChange={(e) => setRejectNote(e.target.value)}
+                        placeholder="Tulis alasan penolakan/revisi (misal: scan buram)..."
+                        className="flex-1 h-8 px-2.5 rounded border border-rose-300 text-xs focus:outline-none"
+                      />
+                      <button
+                        onClick={() => handleRejectWithNote(doc.key)}
+                        className="px-3 py-1 bg-rose-700 text-white rounded text-xs font-semibold"
+                      >
+                        Kirim Catatan
+                      </button>
+                      <button
+                        onClick={() => setActiveDocKey(null)}
+                        className="text-slate-500 text-xs px-1"
+                      >
+                        Batal
+                      </button>
+                    </div>
+                  )}
+
+                  {isRejected && uploaded?.rejectionNote && (
+                    <div className="text-rose-700 text-[11px] bg-rose-100/60 p-1.5 rounded">
+                      <strong>Catatan:</strong> {uploaded.rejectionNote}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Action Bottom Bar */}
+        <div className="pt-4 border-t border-slate-200 flex items-center justify-between">
+          <Button variant="ghost" size="sm" onClick={onClose}>
+            Tutup
+          </Button>
+
+          <div className="flex items-center gap-2">
+            <Button
+              variant="primary"
+              size="md"
+              iconLeft="verified"
+              onClick={handleApproveAll}
+            >
+              Verifikasi Penuh & Terbitkan Kartu CBT
+            </Button>
+          </div>
+        </div>
+      </div>
+    </Modal>
+  );
+};

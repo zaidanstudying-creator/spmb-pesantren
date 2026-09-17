@@ -1,0 +1,15 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "composite": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"],
+      "@spmb/shared": ["../../packages/shared/src/index.ts"],
+      "@spmb/shared/*": ["../../packages/shared/src/*"],
+      "@spmb/ui": ["../../packages/ui/src/index.ts"],
+      "@spmb/ui/*": ["../../packages/ui/src/*"]
+    }
+  },
+  "include": ["src", "../../packages/**/*", "../portal/src/**/*", "../admin/src/**/*"]
+}

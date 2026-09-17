@@ -1,0 +1,28 @@
+{
+  "name": "stitch-pesantren-spmb-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Sistem Penerimaan Santri Baru (SPMB / e-PPDB) Pesantren Modern - React + Vite Monorepo",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspace=apps/hub",
+    "dev:portal": "npm run dev --workspace=apps/portal",
+    "dev:admin": "npm run dev --workspace=apps/admin",
+    "dev:hub": "npm run dev --workspace=apps/hub",
+    "build": "npm run build --workspaces --if-present",
+    "preview": "npm run preview --workspace=apps/hub"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^4.3.3",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.47",
+    "tailwindcss": "^3.4.14",
+    "typescript": "^5.6.3",
+    "vite": "^5.4.10"
+  }
+}
