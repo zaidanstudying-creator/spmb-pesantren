@@ -218,6 +218,22 @@ export const DEFAULT_ADMIN_USERS: AdminUser[] = [
     email: 'verifikator@alhikmah.sch.id',
     role: 'VERIFIKATOR',
     avatarUrl: 'https://lh3.googleusercontent.com/aida/AEtjO1UZRfAtQUiH86beKGAri5kySahq2-BNgAY0S1fOHE2yeNQ_vohiMAzzanEt_4L5ZRXREhbWie2k6oR3h44gV2-sGNX2pa2VKOQo90G5Vm35tfidJ5gnTNTG2EcKTyFGFDa7lzJA4K1bUlNeILStCI4tryJ5VIDMvOufEKzO_Tg7gcOTtL95r6u9Z5nTPyuuiv4bEoKRrEN4tYfz3jvFEkmKMN5frZkNvuF2-5okpt6WABBC97gnErWQq74'
+  },
+  {
+    id: 'adm-3',
+    name: 'Sdr. Muhammad Zainul Muttaqin, S.E.',
+    nip: '199001252020121004',
+    email: 'bendahara@alhikmah.sch.id',
+    role: 'BENDAHARA',
+    avatarUrl: 'https://lh3.googleusercontent.com/aida/AEtjO1UZRfAtQUiH86beKGAri5kySahq2-BNgAY0S1fOHE2yeNQ_vohiMAzzanEt_4L5ZRXREhbWie2k6oR3h44gV2-sGNX2pa2VKOQo90G5Vm35tfidJ5gnTNTG2EcKTyFGFDa7lzJA4K1bUlNeILStCI4tryJ5VIDMvOufEKzO_Tg7gcOTtL95r6u9Z5nTPyuuiv4bEoKRrEN4tYfz3jvFEkmKMN5frZkNvuF2-5okpt6WABBC97gnErWQq74'
+  },
+  {
+    id: 'adm-4',
+    name: 'Tim IT SPMB Al-Hikmah',
+    nip: '202307010001',
+    email: 'admin@alhikmah.sch.id',
+    role: 'ADMIN_SUPER',
+    avatarUrl: 'https://lh3.googleusercontent.com/aida/AEtjO1UZRfAtQUiH86beKGAri5kySahq2-BNgAY0S1fOHE2yeNQ_vohiMAzzanEt_4L5ZRXREhbWie2k6oR3h44gV2-sGNX2pa2VKOQo90G5Vm35tfidJ5gnTNTG2EcKTyFGFDa7lzJA4K1bUlNeILStCI4tryJ5VIDMvOufEKzO_Tg7gcOTtL95r6u9Z5nTPyuuiv4bEoKRrEN4tYfz3jvFEkmKMN5frZkNvuF2-5okpt6WABBC97gnErWQq74'
   }
 ];
 

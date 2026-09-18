@@ -1,5 +1,5 @@
 import React from 'react';
-import { useSPMB } from '@spmb/shared';
+import { useSPMB, getRoleLabel } from '@spmb/shared';
 import { Icon } from '@spmb/ui';
 
 interface AdminHeaderProps {
@@ -57,7 +57,7 @@ export const AdminHeader: React.FC<AdminHeaderProps> = ({ onSearchQuery }) => {
               {currentAdmin?.name || 'Ust. H. Abdullah M.'}
             </span>
             <span className="text-[10px] text-slate-500 font-medium">
-              {currentAdmin?.role === 'KETUA_PANITIA' ? 'Ketua Panitia SPMB' : 'Verifikator Berkas'}
+              {getRoleLabel(currentAdmin?.role).label}
             </span>
           </div>
         </div>

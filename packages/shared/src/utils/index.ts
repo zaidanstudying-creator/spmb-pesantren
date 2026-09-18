@@ -63,6 +63,45 @@ export function generateVirtualAccount(noReg: string): string {
   return `9888 ${year} ${cleanDigits} 0001`;
 }
 
+export function getRoleLabel(role?: string): {
+  label: string;
+  badgeClass: string;
+  icon: string;
+} {
+  switch (role) {
+    case 'KETUA_PANITIA':
+      return {
+        label: 'Ketua Panitia SPMB',
+        badgeClass: 'bg-emerald-100 text-emerald-800 border-emerald-300',
+        icon: 'supervisor_account'
+      };
+    case 'VERIFIKATOR':
+      return {
+        label: 'Verifikator Berkas',
+        badgeClass: 'bg-sky-100 text-sky-800 border-sky-300',
+        icon: 'fact_check'
+      };
+    case 'BENDAHARA':
+      return {
+        label: 'Bendahara Penerimaan',
+        badgeClass: 'bg-amber-100 text-amber-800 border-amber-300',
+        icon: 'payments'
+      };
+    case 'ADMIN_SUPER':
+      return {
+        label: 'Administrator Super',
+        badgeClass: 'bg-slate-100 text-slate-800 border-slate-300',
+        icon: 'admin_panel_settings'
+      };
+    default:
+      return {
+        label: 'Admin SPMB',
+        badgeClass: 'bg-slate-100 text-slate-700 border-slate-200',
+        icon: 'person'
+      };
+  }
+}
+
 export function getStatusBerkasLabel(status: StatusBerkas): {
   label: string;
   badgeClass: string;

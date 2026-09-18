@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useSPMB } from '@spmb/shared';
+import { useSPMB, getRoleLabel } from '@spmb/shared';
 import { Button, Badge, Icon } from '@spmb/ui';
 
 interface AdminLoginPageProps {
@@ -214,7 +214,7 @@ export const AdminLoginPage: React.FC<AdminLoginPageProps> = ({ onLoginSuccess }
                   >
                     <span className="font-bold text-slate-900 block truncate">{user.name}</span>
                     <span className="text-[10px] text-emerald-700 font-semibold block">
-                      {user.role === 'KETUA_PANITIA' ? 'Ketua Panitia' : 'Verifikator Berkas'}
+                      {getRoleLabel(user.role).label}
                     </span>
                   </button>
                 ))}
